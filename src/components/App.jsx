@@ -11,12 +11,25 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount(){
+    const localContacts = localStorage.getItem("contacts");
+    const localContactsPars = JSON.parse(localContacts);
+    if(localContactsPars)
+      this.setState({contacts: localContactsPars})
+    
+  }
+
+  componentDidUpdate(_, prevState){
+    if(prevState.contacts !== this.state.contacts){
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
+    }
+  }
+
   handleChengeName = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
   handleFilter = () => {
-    console.log(this.state.contacts)
     return this.state.contacts.filter(element =>
       element.name.toLowerCase().includes(this.state.filter.toLowerCase())
     );
